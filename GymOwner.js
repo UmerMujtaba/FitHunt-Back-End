@@ -2,10 +2,13 @@ const express = require("express");
 const admin = express();
 const mongoose = require("mongoose");
 admin.use(express.json());
+const jwt = require("jsonwebtoken");
 
 const mongoURL =
   "mongodb+srv://umermujtaba16:admin@cluster0.1dnnuhf.mongodb.net/?retryWrites=true&w=majority";
 
+  const JWT_SECRET =
+  "fadhfhfdjhfhcvfdgrehnhsadndsanawhweyyreyaffqqttutjtiutqafahjtuu5u5wdafwqfrwqgqwgtrh";
   mongoose
   .connect(mongoURL)
   .then(() => {
@@ -81,6 +84,21 @@ admin.post("/login-user",async(req,res) => {
 //   }
 // })
 
-admin.listen(5002, () => {
+admin.post("/gymdata", async (req, res) => {
+  const { token } = req.body;
+  debugger
+  try {
+    // const Gym = jwt2.verify(token, JWT_SECRET);
+
+    Gym.find().then((data) => {
+      return res.send({ status: "Ok", data: JSON.stringify(data) });
+    });
+
+  } catch (error) {
+    return res.send({ error: error });
+  }
+});
+
+admin.listen(5003, () => {
   console.log("Node js server started.");
 });
