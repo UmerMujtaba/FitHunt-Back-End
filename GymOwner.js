@@ -27,7 +27,7 @@ admin.get("/",(req,res)=>{
 });
 
 admin.post("/gymregister", async (req, res) => {
-    const {name,fee,mobile,location} = req.body;
+    const {name,fee,mobile,location, maletime, femaletime} = req.body;
 
     const oldUser = await Gym.findOne({name:name})
     if(oldUser){
@@ -39,6 +39,8 @@ admin.post("/gymregister", async (req, res) => {
             fee:fee,
             mobile: mobile,
             location: location,
+            maletime: maletime,
+            femaletime: femaletime
         })
         res.send({status:"ok",data:"Data Created"})
     }
@@ -62,7 +64,7 @@ admin.post("/login-user",async(req,res) => {
     if(res.status(201))
     {
       return res.send({status: "ok"})
-    }
+    } 
     else{
       return res.send({error:"error"})
     }
@@ -97,7 +99,7 @@ admin.post("/gymdata", async (req, res) => {
   } catch (error) {
     return res.send({ error: error });
   }
-});
+}); 
 
 admin.listen(5003, () => {
   console.log("Node js server started.");

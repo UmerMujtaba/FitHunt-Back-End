@@ -1,54 +1,32 @@
-const express = require('express');
-const multer = require('multer');
-const path = require('path');
-const mongoose = require('mongoose');
+const express=require("express");
+const image=express();
+const mongoose=require("mongoose");
+image.use(express.json());
+const cors =require("gym");
+image.use(cors());
 
-const app = express();
-const port = 3000;
+//monogo DB connection
+const mongoURL =
+  "mongodb+srv://umermujtaba16:admin@cluster0.1dnnuhf.mongodb.net/?retryWrites=true&w=majority";
 
-// Multer configuration
-const storage = multer.diskStorage({
-  destination: './uploads',
-  filename: function (req, file, cb) {
-    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-  }
-});
 
-const upload = multer({ storage: storage });
+  mongoose
+    .connect(monogoURL, {
+      UseNewUrlParser: true,
+    })
+    .then(() => {
+      console.log("Connected to Database");
+    })
+    .catch((e) => console.log(e));
 
-// MongoDB configuration
-mongoose.connect( "mongodb+srv://umermujtaba16:admin@cluster0.1dnnuhf.mongodb.net/?retryWrites=true&w=majority", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+    //importing images
+    require("./imageDetails");
+    const Images = mongoose.model("GymInfo");
 
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-db.once('open', () => {
-  console.log('Connected to MongoDB');
-});
+    image.get("/", async(req,res) => {
+      res.send("Success!!!!")
+    });
 
-// MongoDB schema and model
-const imageSchema = new mongoose.Schema({
-  filePath: String,
-});
-
-const ImageModel = mongoose.model('Image', imageSchema);
-
-// Upload endpoint
-app.post('/upload', upload.single('image'), async (req, res) => {
-  const imagePath = req.file.path;
-
-  try {
-    const newImage = new ImageModel({ filePath: imagePath });
-    await newImage.save();
-    res.json({ filePath: imagePath });
-  } catch (error) {
-    console.error('Error saving image to MongoDB:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
-
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+    image.listen(5004, () => {
+      console.log("Server Started")
+    })
