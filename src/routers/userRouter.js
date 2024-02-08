@@ -1,31 +1,17 @@
-const express = require("express");
-const app = express();
-const mongoose = require("mongoose");
-app.use(express.json());
+const express = require('express');
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-
-const mongoUrl =
-"mongodb+srv://umermujtaba16:admin@cluster0.1dnnuhf.mongodb.net/?retryWrites=true&w=majority";
-
-const JWT_SECRET =
-  "hvdvay6eg8t87qt72393293883uhefiuh78ttq3ifi78272jdsds039[]]pou89ywe";
-mongoose
-  .connect(mongoUrl)
-  .then(() => {
-    console.log("Database Connected");
-  })
-  .catch((e) => {
-    console.log(e);
-  });
-require("./UserDetails");
+const userRouter = express.Router();
+const mongoose = require("mongoose");
+require('../schema/UserDetails')
 const User = mongoose.model("UserInfo");
 
-app.get("/", (req, res) => {
+
+userRouter.get("/", (req, res) => {
   res.send({ status: "Started" });
 });
 
-app.post("/register", async (req, res) => {
+userRouter.post("/register", async (req, res) => {
   const { id,name, email, mobile, password } = req.body;
   console.log(req.body);
 
@@ -50,7 +36,7 @@ app.post("/register", async (req, res) => {
   }
 });
 
-app.post("/login-user", async (req, res) => {
+userRouter.post("/login-user", async (req, res) => {
   const { email, password } = req.body;
   const oldUser = await User.findOne({ email: email });
 
@@ -59,7 +45,7 @@ app.post("/login-user", async (req, res) => {
   }
 
   if (await bcrypt.compare(password, oldUser.password)) {
-    const token = jwt.sign({ email: oldUser.email }, JWT_SECRET);
+    const token = jwt.sign({ email: oldUser.email }, process.env.JWT_SECRET);
 
     if (res.status(201)) {
       return res.send({ status: "ok", data: token });
@@ -69,10 +55,10 @@ app.post("/login-user", async (req, res) => {
   }
 });
 
-app.post("/userdata", async (req, res) => {
+userRouter.get("/userdata", async (req, res) => {
   const { token } = req.body;
   try {
-    const user = jwt.verify(token, JWT_SECRET);
+    const user = jwt.verify(token, process.env.JWT_SECRET);
     const useremail = user.email;
 
     User.findOne({ email: useremail }).then((data) => {
@@ -83,6 +69,4 @@ app.post("/userdata", async (req, res) => {
   }
 });
 
-app.listen(5001, () => {
-  console.log("Node js server started.");
-});
+module.exports = userRouter;
