@@ -29,8 +29,10 @@ gymRouter.post("/gymregister", async (req, res) => {
     }
 });
 
-gymRouter.get("/gymdata", async (req, res) => {
+gymRouter.post("/gymdata", async (req, res) => {
   const { token } = req.body;
+  console.log(req.body) 
+  console.log("I am New",token) 
   try {
     jwt.verify(token, process.env.JWT_SECRET);
 

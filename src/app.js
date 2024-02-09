@@ -3,11 +3,15 @@ const app = express();
 const mongoose = require("mongoose");
 const userRouter = require('./routers/userRouter')
 const gymRouter = require('./routers/gymRouter')
+const trainerRouter = require('./routers/trainerRouter')
+const cors = require('cors')
+app.use(cors())
 
 require('dotenv').config();
 mongoose
   .connect(process.env.MONGO_URL)
   .then(() => {
+    console.log("Database Connected")
   })
   .catch((e) => {
     console.log(e);
@@ -16,7 +20,9 @@ mongoose
 app.use(express.json());
 app.use(userRouter);
 app.use(gymRouter);
-
+app.use(trainerRouter);
+ 
 app.listen(5001, () => {
   console.log("Node js server started.");
 });
+ 

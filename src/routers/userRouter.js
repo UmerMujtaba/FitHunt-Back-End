@@ -12,7 +12,7 @@ userRouter.get("/", (req, res) => {
 });
 
 userRouter.post("/register", async (req, res) => {
-  const { id,name, email, mobile, password } = req.body;
+  const { id,name, email, mobile,gender,age, password } = req.body;
   console.log(req.body);
 
   const oldUser = await User.findOne({ email: email });
@@ -28,6 +28,8 @@ userRouter.post("/register", async (req, res) => {
       name: name,
       email: email,
       mobile,
+      gender:gender,
+      age:age,
       password: encryptedPassword,
     });
     res.send({ status: "ok", data: "User Created" });
@@ -55,17 +57,18 @@ userRouter.post("/login-user", async (req, res) => {
   }
 });
 
-userRouter.get("/userdata", async (req, res) => {
+userRouter.post("/userdata", async (req, res) => {
   const { token } = req.body;
+  console.log("Iam New",token)
   try {
     const user = jwt.verify(token, process.env.JWT_SECRET);
-    const useremail = user.email;
+    const useremail = user.email; 
 
     User.findOne({ email: useremail }).then((data) => {
       return res.send({ status: "Ok", data: data });
     });
   } catch (error) {
-    return res.send({ error: error });
+    return res.send({ error: error }); 
   }
 });
 
