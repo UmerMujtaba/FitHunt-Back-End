@@ -43,8 +43,7 @@ gymRouter.post("/gymdata", async (req, res) => {
   console.log("I am New",token) 
   try {
     jwt.verify(token, process.env.JWT_SECRET);
-
-    Gym.find().then((data) => {
+    await Gym.find({name: "Gold Gym"}).then((data) => {
       return res.send({ status: "Ok", data: JSON.stringify(data) });
     });
 
