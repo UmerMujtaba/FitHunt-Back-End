@@ -4,8 +4,10 @@ const mongoose = require("mongoose");
 const userRouter = require('./routers/userRouter')
 const gymRouter = require('./routers/gymRouter')
 const trainerRouter = require('./routers/trainerRouter')
+const { cloudinaryConfig } = require('./config/cloudinaryConfig')
 const cors = require('cors')
 app.use(cors())
+app.use('*', cloudinaryConfig);
 
 require('dotenv').config();
 mongoose

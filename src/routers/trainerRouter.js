@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const trainerRouter = express.Router();
 const mongoose = require("mongoose");
 require('../schema/TrainerDetails')
-const User = mongoose.model("TrainerInfo");
+const Trainer = mongoose.model("TrainerInfo");
 
 trainerRouter.get("/", (req, res) => {
     res.send({ status: "Started" });
@@ -14,7 +14,7 @@ trainerRouter.post("/trainerregister", async (req, res) => {
     const { id,name, age, email,mobile,fee } = req.body;
     console.log(req.body);
   
-    const oldUser = await User.findOne({ email: email });
+    const oldUser = await Trainer.findOne({ email: email });
   
     if (oldUser) {
       return res.send({ data: "User already exists!!" });
@@ -42,7 +42,7 @@ trainerRouter.post("/trainerdata", async (req, res) => {
       const user = jwt.verify(token, process.env.JWT_SECRET);
       const useremail = user.email; 
   
-      User.findOne({}).then((data) => {
+      Trainer.findOne({}).then((data) => {
         return res.send({ status: "Ok", data: data });
       });
     } catch (error) { 

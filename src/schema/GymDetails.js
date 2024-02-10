@@ -6,7 +6,8 @@ const GymInfoSchema = new mongoose.Schema({
   mobile: String,
   location: String,
   maletime: String,
-  femaletime : String
+  femaletime : String,
+  image_url: String
 },{
     collection: "GymInfo"
 });
