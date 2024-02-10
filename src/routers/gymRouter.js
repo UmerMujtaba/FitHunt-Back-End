@@ -18,7 +18,7 @@ gymRouter.post("/gymregister", multerUploads, async (req, res) => {
     const {name,fee,mobile,location, maletime, femaletime} = req.body;
     const oldUser = await Gym.findOne({name:name})
     if(oldUser){
-        return res.send({data: "Gym already exists!!"})
+        return res.send({data: "Gym already exists!!"}) 
     }
     try{
         await Gym.create({

@@ -9,7 +9,7 @@ const GymInfoSchema = new mongoose.Schema({
   femaletime : String,
   image_url: String
 },{
-    collection: "GymInfo"
+    collection: "GymInfo" 
 });
 
-mongoose.model("GymInfo", GymInfoSchema)
+mongoose.model("GymInfo", GymInfoSchema) 

@@ -21,7 +21,7 @@ userRouter.post("/register", async (req, res) => {
     return res.send({ data: "User already exists!!" });
   }
   const encryptedPassword = await bcrypt.hash(password, 10);
-
+ 
   try {
     await User.create({
       id:id,
@@ -69,6 +69,32 @@ userRouter.post("/userdata", async (req, res) => {
     });
   } catch (error) {
     return res.send({ error: error }); 
+  }
+});
+
+
+userRouter.post("/update-user", async (req, res) => {
+  const { id, name, email, age, mobile } = req.body;
+
+  try {
+    // Find the user by ID
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).send({ status: "error", data: "User not found" });
+    }
+
+    // Update user data
+    user.name = name;
+    user.email = email;
+    user.age = age;
+    user.mobile = mobile;
+
+    // Save the updated user data
+    await user.save();
+   
+    res.send({ status: "ok", data: "User updated successfully" });
+  } catch (error) {
+    res.status(500).send({ status: "error", data: error.message });
   }
 });
 
