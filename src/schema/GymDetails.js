@@ -10,6 +10,6 @@ const GymInfoSchema = new mongoose.Schema({
   image_url: String
 },{
     collection: "GymInfo"
-});
-
+}); 
+ 
 mongoose.model("GymInfo", GymInfoSchema)

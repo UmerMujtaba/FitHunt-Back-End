@@ -21,7 +21,7 @@ trainerRouter.post("/trainerregister", async (req, res) => {
     }
   
     try {
-      await User.create({
+      await Trainer.create({
         id:id,
         name: name,
         age:age,

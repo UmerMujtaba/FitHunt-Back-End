@@ -27,4 +27,4 @@ app.use(trainerRouter);
 app.listen(5001, () => {
   console.log("Node js server started.");
 });
- 
+  
