@@ -74,25 +74,22 @@ userRouter.post("/userdata", async (req, res) => {
 
 
 userRouter.post("/update-user", async (req, res) => {
-  const { id, name, email, age, mobile } = req.body;
-
+  const { token,name,age,mobile } = req.body;
   try {
-    // Find the user by ID
-    const user = await User.findById(id);
-    if (!user) {
-      return res.status(404).send({ status: "error", data: "User not found" });
-    }
+    const user = jwt.verify(token, process.env.JWT_SECRET);
+    const useremail = user.email; 
+    console.log(user);
+    const userdata = await User.findOne({ email: useremail })
+    console.log(userdata);
+    userdata.name=name;
+    userdata.age=age;
+    userdata.mobile=mobile;
 
-    // Update user data
-    user.name = name;
-    user.email = email;
-    user.age = age;
-    user.mobile = mobile;
 
-    // Save the updated user data
-    await user.save();
-   
-    res.send({ status: "ok", data: "User updated successfully" });
+
+    await userdata.save();
+
+    res.send({status: "ok"})
   } catch (error) {
     res.status(500).send({ status: "error", data: error.message });
   }
